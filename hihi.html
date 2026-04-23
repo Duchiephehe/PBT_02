@@ -1,0 +1,96 @@
+    <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minh chứng Thuộc tính ALT - Duchiephehe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .test-case:last-child {
+            border-bottom: none;
+        }
+        h3 {
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+        .img-box {
+            display: inline-block;
+            border: 2px dashed #ff4c4c;
+            padding: 10px;
+            background-color: #ffe6e6;
+            min-width: 200px;
+            min-height: 50px;
+        }
+        /* Cố tình tạo CSS cho thẻ img lỗi để dễ nhìn thấy alt text */
+        img {
+            font-style: italic;
+            color: #d8000c;
+        }
+        .note {
+            font-size: 14px;
+            color: #555;
+            background: #eef;
+            padding: 10px;
+            border-left: 4px solid #0056b3;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Kiểm tra hiển thị thuộc tính ALT (Khi ảnh lỗi/Mạng yếu)</h2>
+        <p><i>Lưu ý: Các đường dẫn ảnh (src) đã cố tình để sai để giả lập tình huống ảnh không tải được, qua đó ép trình duyệt hiển thị thuộc tính ALT ra màn hình.</i></p>
+
+        <div class="test-case">
+            <h3>1. Ảnh sản phẩm (iPhone 16)</h3>
+            <div class="ip1">
+                <img src="iphone-16-loi.jpg" alt="Điện thoại Apple iPhone 16 màu Titan tự nhiên, mặt lưng kính, dung lượng 256GB">
+            </div>
+            <div class="note">
+                <strong>Minh chứng:</strong> Người dùng vẫn đọc được chính xác tên, màu sắc, và dung lượng sản phẩm dù ảnh bị lỗi. Google SEO cũng đọc được dòng này.
+            </div>
+        </div>
+
+        <div class="test-case">
+            <h3>2. Ảnh trang trí (Decorative Image)</h3>
+            <div class="img-box">
+                <img src="hoa-van-trang-tri-loi.png" alt="">
+            </div>
+            <div class="note">
+                <strong>Minh chứng:</strong> Vì <code>alt=""</code> (để trống), nên khi ảnh lỗi, trình duyệt sẽ "ẩn" nó đi hoàn toàn, không hiện icon ảnh vỡ hay chữ rác, giúp giao diện không bị rối. Trình đọc màn hình cũng sẽ tự động bỏ qua khu vực này.
+            </div>
+        </div>
+
+        <div class="test-case">
+            <h3>3. Ảnh biểu đồ (Doanh thu Q1/2026)</h3>
+            <div class="img-box">
+                <img src="https://channel.mediacdn.vn/428462621602512896/2026/4/20/photo-1-17766689967241965566727.jpg" alt="Biểu đồ cột thể hiện doanh thu Quý 1 năm 2026 đạt 50 tỷ đồng, tăng trưởng 20% so với cùng kỳ năm ngoái">
+            </div>
+            <div class="note">
+                <strong>Minh chứng:</strong> Thay vì chỉ ghi "Ảnh biểu đồ" vô nghĩa, dòng <code>alt</code> này đã cung cấp luôn số liệu quan trọng nhất. Người khiếm thị nghe xong vẫn nắm được trọn vẹn thông tin kinh doanh.
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
