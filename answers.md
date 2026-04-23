@@ -158,8 +158,154 @@ Trường hợp 3: Ảnh biểu đồ doanh thu Q1/2026
             </div>
     ![demo](Screenshots/bieudo.png)
 
+## Câu A5
+Cách 1 (<img> đứng độc lập): Chỉ đơn thuần là chèn một bức ảnh vào trang web. Nó giống như một "danh từ" trong câu.
+Dùng khi bức ảnh chỉ đóng vai trò minh họa đơn thuần, hoặc là một phần của nội dung mà không cần chú thích bằng chữ ngay bên dưới. Nếu xóa bức ảnh đi, nội dung văn bản xung quanh vẫn đủ ý nghĩa. (ví dụ ảnh đại diện ava , icon hoặc logo trang web )
+Cách 2 (<figure> + <figcaption>): Là một đơn vị nội dung hoàn chỉnh. Nó bao gồm bức ảnh và phần chú thích đi kèm. Cặp thẻ này báo hiệu cho trình duyệt và Google biết rằng: "Đây là một tổ hợp gồm ảnh và mô tả, chúng đi cùng nhau và bổ trợ cho nhau". 
+Dùng khi bức ảnh là một đối tượng quan trọng cần được giải thích, chú thích rõ ràng. Đặc biệt là khi bạn muốn tách biệt khối ảnh này ra khỏi luồng văn bản (giống như các hình minh họa trong sách giáo khoa)
+Ví dụ ảnh sản phẩm chi tiết, giao diện làm phần PBT_01
+![demo](Screenshots/anha5.png)
+<figure>
+<img src="screenshots/sony.webp" alt="Tai nghe Sony WH-1000XM5">
+ </figure>
 
+# Phần C
+## C1
+<form>
+    Tên: <input type="text">
+    
+    <input type="email" placeholder="Email của bạn">
+    
+    <input type="password" placeholder="Mật khẩu">
+    <input type="password" placeholder="Nhập lại mật khẩu">
+    
+    Phone: <input type="text" value="0901234567">
+    
+    <select>
+        <option>Hà Nội</option>
+        <option>TP.HCM</option>
+    </select>
+    
+    <label>
+        Tôi đồng ý điều khoản
+    </label>
+    
+    <input type="submit" value="Gửi">
+</form>
 
+1. Lỗi 1: Dòng 1 — Thẻ <form> thiếu thuộc tính method="POST"
+Mặc định form sẽ dùng phương thức GET, điều này sẽ đẩy cả Mật khẩu và Email hiển thị trần trụi trên thanh URL, vi phạm bảo mật nghiêm trọng.
+Sửa:
+
+<form action="/api/submit" method="POST">
+
+2. 
+Lỗi 2: Dòng 2 — Input "Tên" không có <label for="...">, thiếu name và required
+Viết text trơn "Tên:" làm nhãn là vi phạm accessibility (Screen Reader không hiểu). Đồng thời thiếu name khiến data không thể gửi lên server, thiếu required làm hỏng validation.
+Sửa:
+
+<label for="fullname">Tên:</label> 
+<input type="text" id="fullname" name="fullname" required>
+
+3. 
+Lỗi 3: Dòng 4 — Dùng placeholder thay thế cho thẻ <label> ở input Email
+Lạm dụng placeholder làm nhãn là một thói quen xấu (WCAG fail) vì khi gõ chữ, nhãn sẽ biến mất. Thiếu liên kết id và name.
+Sửa:
+
+<label for="email">Email:</label> 
+<input type="email" id="email" name="email" placeholder="Email của bạn" required>
+
+4. 
+Lỗi 4: Dòng 6, 7 — Ô Password thiếu <label>, thiếu name và không có Validation độ dài
+Thiếu minlength khiến người dùng có thể nhập mật khẩu 1 ký tự. Đồng thời phải bọc label đàng hoàng cho cả 2 ô.
+Sửa:
+
+<label for="pwd">Mật khẩu:</label> 
+<input type="password" id="pwd" name="password" placeholder="Mật khẩu" minlength="8" required>
+
+<label for="pwd_confirm">Nhập lại mật khẩu:</label> 
+<input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="Nhập lại mật khẩu" minlen
+
+Lỗi 5: Dòng 9 — Input Phone dùng sai type, lạm dụng value và thiếu validation
+Dùng type="text" sẽ không gọi được bàn phím số ưu tiên trên điện thoại (vi phạm UX/Accessibility). Dùng value="0901234567" sẽ gán cứng dữ liệu vào ô, ép người dùng phải xóa đi mới nhập được. Đồng thời, thiếu pattern để kiểm tra định dạng số điện thoại hợp lệ.
+
+<label for="phone">Phone:</label> 
+<input type="tel" id="phone" name="phone" placeholder="0901234567" pattern="0[35789][0-9]{8}" required>
+
+6. 
+Lỗi 6: Dòng 11 — Thẻ <select> thiếu <label>, name và Option rỗng mặc định
+Thiếu name nên server không nhận được dữ liệu. Thiếu một <option> rỗng đầu tiên (như "Chọn thành phố") sẽ khiến thẻ này luôn mặc định gửi đi "Hà Nội" ngay cả khi người dùng quên chưa chạm vào ô này.
+Sửa:
+
+<label for="city">Thành phố:</label>
+<select id="city" name="city" required>
+    <option value="">-- Chọn thành phố --</option>
+    <option value="HN">Hà Nội</option>
+    <option value="HCM">TP.HCM</option>
+</select>
+
+7. 
+Lỗi 7: Dòng 16, 17, 18 — Thẻ <label> điều khoản không chứa thẻ <input> nào
+Viết thẻ <label> nhưng lại... quên không nhúng thẻ <input type="checkbox"> vào bên trong (hoặc dùng for), khiến người dùng không có hộp kiểm nào để click xác nhận.
+Sửa:
+
+<label>
+    <input type="checkbox" name="agree" required> Tôi đồng ý điều khoản
+</label>
+
+8. 
+Lỗi 8: Dòng 20 — Nút gửi dùng <input type="submit"> 
+Dù <input type="submit"> chạy được, nhưng theo Best Practices hiện đại (HTML5), nút bấm trong form nên dùng thẻ <button type="submit">. Thẻ button giúp bạn dễ dàng chèn icon, style CSS linh hoạt hơn và chuẩn Semantic.
+Sửa
+
+<button type="submit">Gửi</button>
+
+## Câu C2
+1. Viết pattern regex cho CMND/CCCD và Số tài khoản
+
+CMND/CCCD (Đúng 12 chữ số):(ví dụ 001205017084 có 12 chữ số)
+
+HTML
+<input type="text" pattern="[0-9]{12}" required title="CCCD phải bao gồm đúng 12 chữ số">
+Số tài khoản (Từ 10 đến 15 chữ số):
+
+HTML
+<input type="text" pattern="[0-9]{10,15}" required title="Số tài khoản phải từ 10 đến 15 chữ số">
+
+email đúng format
+<input type="email" id="email" name="email" required>
+mã pin 6 chữ số
+ <input type="password" pattern="[0-9]{6}" required> 
+
+2. HTML5 validation đủ an toàn cho ứng dụng ngân hàng chưa? Tại sao?
+Không đủ an toàn
+
+Tại sao?
+HTML5 Validation là cơ chế kiểm tra diễn ra hoàn toàn ở Client-side (trên trình duyệt của người dùng). Nó sinh ra chỉ để mang lại trải nghiệm người dùng (UX) tốt hơn, giúp báo lỗi nhanh mà không cần tải lại trang.
+Tuy nhiên, nó rất dễ bị qua mặt. Một người dùng bình thường chỉ cần nhấn F12 (Mở DevTools), tìm đến thẻ <input> và xóa bỏ các thuộc tính như required, pattern, maxlength... Sau đó, họ có thể submit bất cứ dữ liệu rác nào lên server.
+(ví dụ:
+Bạn tải trang web đăng ký về máy. Ô số tài khoản yêu cầu nhập số và bị giới hạn 15 ký tự (maxlength="15").Bạn mở DevTools, xóa chữ maxlength="15" .Bạn copy một bài văn dài 1000 chữ dán vào ô số tài khoản, bạn bấm gửi.Trình duyệt kiểm tra lại HTML. Vì chữ maxlength đã bị bạn xóa ở bước 2, trình duyệt thấy ô này hoàn toàn hợp lệ. Nó lập tức đóng gói bài văn 1000 chữ đó và bắn thẳng lên Server. Kết quả: HTML5 Validation đã bị qua mặt thành công 100%. Gói tin chứa dữ liệu rác đã được gửi đi.Nếu lúc này, Backend (đang nằm trên máy chủ của ngân hàng) không chịu kiểm tra lại xem dữ liệu nhận được có đúng là số hay không mà cứ thế lưu thẳng vào Database, thì Database sẽ bị lỗi, hoặc nghiêm trọng hơn là bị sập hệ thống do tràn bộ nhớ.)
+Ví dụ cơ bản: Xóa minlength từ 8 thành 3 ký tự bằng devtools vẫn submit được 
+![demo](Screenshots/minlength.png)
+
+3. 3 loại validation mà HTML5 KHÔNG THỂ làm được (Phải dùng JavaScript)
+HTML5 rất tiện nhưng lại bị "cứng", không xử lý được các logic động. Bạn bắt buộc phải dùng JavaScript cho các trường hợp sau:
+
+Xác thực chéo (Cross-field Validation): HTML5 không thể so sánh giá trị của hai ô khác nhau. Ví dụ: Ô "Nhập lại mật khẩu" phải giống hệt ô "Mật khẩu" ở trên, hoặc "Ngày kết thúc" không được nhỏ hơn "Ngày bắt đầu".
+
+Kiểm tra tính hợp lệ của nghiệp vụ (Business Logic): HTML5 có thể chặn người dùng nhập chữ vào ô Ngày sinh, nhưng nó không thể tính toán để cấm người dùng dưới 18 tuổi đăng ký tài khoản tín dụng. JS cần thiết để lấy ngày hiện tại trừ đi ngày sinh và đưa ra quyết định.
+
+Xác thực bất đồng bộ (Asynchronous Validation): HTML5 không thể biết Email hoặc số CCCD này đã tồn tại trong cơ sở dữ liệu hay chưa. JavaScript (thông qua AJAX/Fetch) sẽ phải gửi một request ngầm xuống server để kiểm tra trùng lặp và báo lỗi ngay lập tức trên giao diện mà không cần Submit form.
+
+4. Nêu 2 rủi ro bảo mật nếu chỉ validate trên Frontend mà không validate Backend
+Nếu lập trình viên Backend chủ quan, tin tưởng 100% vào dữ liệu Frontend gửi lên, ứng dụng ngân hàng sẽ phải đối mặt với các rủi ro tàn khốc:
+
+Rủi ro phá hủy cơ sở dữ liệu (SQL Injection / XSS):
+Nếu không có Backend Validation để làm sạch (sanitize) dữ liệu, hacker có thể gửi các đoạn mã độc SQL (ví dụ: '; DROP TABLE Users; --) hoặc mã JavaScript độc hại thay vì tên đăng nhập. Khi Backend  chạy đoạn mã này, toàn bộ dữ liệu ngân hàng có thể bị xóa trắng hoặc bị đánh cắp.
+
+Rủi ro thao túng nghiệp vụ tài chính (Data Manipulation):
+Hacker có thể chặn request gửi đi và sửa đổi dữ liệu. Ví dụ: Ở Frontend, form chỉ cho phép chuyển tiền lớn hơn 0. Nhưng hacker có thể sửa gói tin thành chuyển đi -100.000.000 VNĐ. Nếu Backend không kiểm tra lại điều kiện (số tiền > 0), hacker sẽ nghiễm nhiên được cộng thêm 100 triệu vào tài khoản (vì trừ đi số âm là cộng). Đây là lỗ hổng chí mạng trong Fintech.
+ Frontend Validation là để chiều lòng người dùng (UX), Backend Validation mới là tấm khiên bảo vệ hệ thống. Luôn phải Validate ở cả 2 nơi!
 
 
 
